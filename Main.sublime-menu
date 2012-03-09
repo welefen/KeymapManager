@@ -1,0 +1,13 @@
+[
+    {
+        "id": "view",
+        "children":
+        [
+            {
+                "caption": "Keymap Manager",
+                "id": "keymap-manager",
+                "command": "keymapmanager"
+            }
+        ]
+    }
+]
