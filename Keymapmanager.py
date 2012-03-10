@@ -46,7 +46,10 @@ class KeymapmanagerCommand(sublime_plugin.TextCommand):
 			jsonData = json.loads(content)
 			if not isinstance(jsonData, list):
 				continue
+			i = 0
 			for item in jsonData:
+				if i >= 3:
+					break
 				if "keys" not in item or "command" not in item:
 					continue
 				keys = item["keys"]
@@ -56,6 +59,7 @@ class KeymapmanagerCommand(sublime_plugin.TextCommand):
 				item["name"] = name
 				plugins.append([name, command + " : " +  keys])
 				self.plugins.append(item)
+				i += 1
 		for item in self.sysCommand:
 			plugins.append([item['name'], item['command'] + " : " +  ",".join(item['keys'])])
 			self.plugins.append(item)
