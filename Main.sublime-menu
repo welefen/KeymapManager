@@ -6,7 +6,7 @@
             {
                 "caption": "Keymap Manager",
                 "id": "keymap-manager",
-                "command": "keymapmanager"
+                "command": "keymap_manager"
             }
         ]
     }

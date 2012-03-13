@@ -1,3 +1,8 @@
 [
-		{ "keys": ["ctrl+alt+k"], "command": "keymapmanager"}
+    {
+        "command": "keymapmanager",
+        "keys": [
+            "ctrl+alt+k"
+        ]
+    }
 ]
