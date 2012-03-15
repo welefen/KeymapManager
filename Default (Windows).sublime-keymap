@@ -1,6 +1,6 @@
 [
     {
-        "command": "keymapmanager",
+        "command": "keymap_manager",
         "keys": [
             "ctrl+alt+k"
         ]
