@@ -31,6 +31,7 @@ class KeymapManagerCommand(sublime_plugin.TextCommand):
 		dirs.sort(key=lambda x: x.lower())
 		plugins = []
 		ignored_packages = settings.get("ignored_packages")
+		single_max_nums = int(settings.get("single_max_nums"))
 		for name in dirs:
 			if name in ignored_packages:
 				continue
@@ -55,7 +56,7 @@ class KeymapManagerCommand(sublime_plugin.TextCommand):
 			i = 0
 			for item in jsonData:
 				#only show 3 items if num max than 3
-				if i >= 3:
+				if single_max_nums > 0 and i >= single_max_nums :
 					break
 				if "keys" not in item or "command" not in item:
 					continue
