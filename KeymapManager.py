@@ -20,11 +20,15 @@ class KeymapManagerCommand(sublime_plugin.TextCommand):
 	#installed plugins list
 	plugins = None
 
+	plugins_keys = None
+
 	def run(self, edit):
 		self.defaultCommand.sort(key=lambda x: x["name"].lower())
 		
 		if self.plugins == None:
 			self.plugins = []
+		if self.plugins_keys == None:
+			self.plugins_keys = {}
 		path = sublime.packages_path()
 		dirs = os.listdir(path)
 		#sort with insensitive
@@ -55,22 +59,32 @@ class KeymapManagerCommand(sublime_plugin.TextCommand):
 				continue
 			i = 0
 			for item in jsonData:
-				#only show 3 items if num max than 3
-				if single_max_nums > 0 and i >= single_max_nums :
-					break
 				if "keys" not in item or "command" not in item:
 					continue
-				keys = item["keys"]
-				if isinstance(keys, list):
-					keys = ", " . join(keys)
-				command = item["command"]
-				item["name"] = name
-				plugins.append([name, command + " : " +  keys])
-				self.plugins.append(item)
-				i += 1
+				if single_max_nums <= 0 or i <= single_max_nums :
+					keys = item["keys"]
+					if not isinstance(keys, list):
+						keys = [keys]
+					for key in keys:
+						if key not in self.plugins_keys:
+							self.plugins_keys[key] = []
+						if item["command"] not in self.plugins_keys[key]:
+							self.plugins_keys[key].append(item["command"])
+
+					if isinstance(keys, list):
+						keys = ", " . join(keys)
+					command = item["command"]
+					item["name"] = name
+					plugins.append([name, command + " : " +  keys])
+					self.plugins.append(item)
+					i += 1
+
 		for item in self.defaultCommand:
 			plugins.append([item['name'], item['command'] + " : " +  ",".join(item['keys'])])
 			self.plugins.append(item)
+
+		plugins.append(["KeymapConflict", "check plugins keymap conflict"])
+		self.plugins.append({"name": "KeymapConflict"})
 
 		self.view.window().show_quick_panel(plugins, self.panel_done)
 
@@ -79,6 +93,9 @@ class KeymapManagerCommand(sublime_plugin.TextCommand):
 		if picked == -1:
 			return 
 		item = self.plugins[picked]
+		if item["name"] == "KeymapConflict":
+			self.checkKeymapConflict()
+			return
 		if self.checkContext(item) == False:
 			return
 		args = {}
@@ -103,3 +120,14 @@ class KeymapManagerCommand(sublime_plugin.TextCommand):
 		pyFiles = glob.glob("*.py")
 		sublime.status_message(",".join(pyFiles))
 		return True
+
+	def checkKeymapConflict(self):
+		keymapConflict=[]
+		for key,item in self.plugins_keys.items():
+			if len(item) > 1:
+				keymapConflict.append([key, "Conflict in \""+", ".join(item) + "\" commands"])
+		if len(keymapConflict) > 0:
+			self.view.window().show_quick_panel(keymapConflict, self.check_panel_done)
+
+	def check_panel_done(self, picked):
+		pass
