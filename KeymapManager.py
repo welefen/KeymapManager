@@ -34,8 +34,8 @@ class KeymapManagerCommand(sublime_plugin.TextCommand):
 		#sort with insensitive
 		dirs.sort(key=lambda x: x.lower())
 		plugins = []
-		ignored_packages = settings.get("ignored_packages")
-		single_max_nums = int(settings.get("single_max_nums"))
+		ignored_packages = settings.get("ignored_packages") or []
+		single_max_nums = int(settings.get("single_max_nums") or 3)
 		for name in dirs:
 			if name in ignored_packages:
 				continue
