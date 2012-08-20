@@ -8,14 +8,19 @@ class KeymapManagerCommand(sublime_plugin.TextCommand):
 	"""
 	keymap manager for plugins
 	"""
+	osname = sublime.platform()
+	ctrlname = "ctrl"
+	#ctrlname is cmd on macos
+	if osname.lower() == "osx":
+		ctrlname = "cmd"
 	#add some default very usefull commands
 	defaultCommand = [
-		{"name": "Goto Anything...", "keys": ["ctrl+p"], "command": "show_overlay", "args": {"overlay": "goto", "show_files": True} },
-		{"name": "Command Palette", "keys": ["ctrl+shift+p"], "command": "show_overlay", "args": {"overlay": "command_palette"} },
-		{"name": "Goto Symbol...", "keys": ["ctrl+r"], "command": "show_overlay", "args": {"overlay": "goto", "text": "@"} },
-		{"name": "Goto Line...",  "keys": ["ctrl+g"], "command": "show_overlay", "args": {"overlay": "goto", "text": ":"} },
-		{"name": "Search Keywords", "keys": ["ctrl+;"], "command": "show_overlay", "args": {"overlay": "goto", "text": "#"} },
-		{"name": "Show Console",  "keys": ["ctrl+`"],  "command": "show_panel", "args": {"panel": "console", "toggle": True} }
+		{"name": "Goto Anything...", "keys": [ctrlname + "+p"], "command": "show_overlay", "args": {"overlay": "goto", "show_files": True} },
+		{"name": "Command Palette", "keys": [ctrlname + "+shift+p"], "command": "show_overlay", "args": {"overlay": "command_palette"} },
+		{"name": "Goto Symbol...", "keys": [ctrlname + "+r"], "command": "show_overlay", "args": {"overlay": "goto", "text": "@"} },
+		{"name": "Goto Line...",  "keys": [ctrlname + "+g"], "command": "show_overlay", "args": {"overlay": "goto", "text": ":"} },
+		{"name": "Search Keywords", "keys": [ctrlname + "+;"], "command": "show_overlay", "args": {"overlay": "goto", "text": "#"} },
+		{"name": "Show Console",  "keys": [ctrlname + "+`"],  "command": "show_panel", "args": {"panel": "console", "toggle": True} }
 	]
 	#installed plugins list
 	plugins = None
